@@ -22,10 +22,37 @@
       </ul>
 
       <div class="nav-right">
-        <span id="user-chip" class="user-chip" data-auth="in" style="display:none;"></span>
+        <button id="profile-toggle" class="icon-btn profile-btn" data-auth="in" aria-label="Open user profile" aria-expanded="false" style="display:none;">
+          <i class="bi bi-person-circle"></i>
+        </button>
+        <div id="user-menu" class="user-menu" aria-hidden="true">
+          <div class="user-menu-card">
+            <div class="user-menu-header">
+              <span>Profile</span>
+              <button id="user-menu-close" class="icon-btn" aria-label="Close profile menu"><i class="bi bi-x-lg"></i></button>
+            </div>
+            <div class="user-menu-details">
+              <div class="user-menu-row">
+                <span class="menu-label">Name</span>
+                <span id="menu-user-name"></span>
+              </div>
+              <div class="user-menu-row">
+                <span class="menu-label">Email</span>
+                <span id="menu-user-email"></span>
+              </div>
+              <div class="user-menu-row">
+                <span class="menu-label">Login method</span>
+                <span id="menu-auth-method"></span>
+              </div>
+              <div class="user-menu-row password-row" style="display:none;">
+                <span class="menu-label">Password</span>
+                <span>••••••••</span>
+              </div>
+            </div>
+            <button id="logout-btn" data-auth="in" class="btn btn-outline btn-sm user-menu-logout" style="display:none;">Log Out</button>
+          </div>
+        </div>
         <a href="login.html" data-auth="out" class="btn btn-outline btn-sm">Log In</a>
-        <button id="logout-btn" data-auth="in" class="btn btn-outline btn-sm" style="display:none;">Log Out</button>
-
         <a href="cart.html" class="icon-btn cart-badge" title="Cart">
           <i class="bi bi-cart3"></i>
           <span id="cart-count" class="count" style="display:none;"></span>
@@ -79,7 +106,7 @@
   </footer>
 
   <script type="module" src="js/firebase-config.js"></script>
-  <script type="module" src="js/appß.js"></script>
+  <script type="module" src="js/app.js"></script>
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>

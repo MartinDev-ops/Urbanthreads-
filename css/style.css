@@ -121,6 +121,89 @@ button, input, select { font-family: inherit; }
   display: flex;
   align-items: center;
   gap: 14px;
+  position: relative;
+}
+
+.profile-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  min-width: 280px;
+  max-width: 320px;
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  z-index: 60;
+}
+
+.user-menu[aria-hidden="false"] {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.user-menu-card {
+  display: grid;
+  gap: 16px;
+}
+
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.user-menu-header span {
+  font-weight: 700;
+}
+
+.user-menu-details {
+  display: grid;
+  gap: 10px;
+}
+
+.user-menu-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.user-menu-row .menu-label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.user-menu-row span:last-child {
+  text-align: right;
+}
+
+.password-row span:last-child {
+  letter-spacing: 0.22em;
+}
+
+.user-menu-logout {
+  width: 100%;
+  justify-content: center;
 }
 
 .user-chip {
@@ -616,6 +699,7 @@ button, input, select { font-family: inherit; }
   border-radius: 50%;
   border: none;
   background: var(--bg);
+  color: var(--text);
   cursor: pointer;
   font-weight: 700;
 }

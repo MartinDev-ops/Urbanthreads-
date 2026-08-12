@@ -53,8 +53,56 @@ export function setCartBadgeCount(count) {
 //   #logout-btn       -> triggers signOut()
 function initAuthUI() {
   const logoutBtn = document.getElementById("logout-btn");
+  const profileToggle = document.getElementById("profile-toggle");
+  const userMenu = document.getElementById("user-menu");
+  const userMenuClose = document.getElementById("user-menu-close");
+
+  const closeMenu = () => {
+    if (!userMenu) return;
+    userMenu.setAttribute("aria-hidden", "true");
+    if (profileToggle) profileToggle.setAttribute("aria-expanded", "false");
+  };
+
+  const openMenu = () => {
+    if (!userMenu) return;
+    userMenu.setAttribute("aria-hidden", "false");
+    if (profileToggle) profileToggle.setAttribute("aria-expanded", "true");
+  };
+
+  if (profileToggle) {
+    profileToggle.addEventListener("click", (event) => {
+      event.stopPropagation();
+      const isOpen = userMenu && userMenu.getAttribute("aria-hidden") === "false";
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+  }
+
+  if (userMenuClose) {
+    userMenuClose.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeMenu();
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    if (
+      userMenu &&
+      userMenu.getAttribute("aria-hidden") === "false" &&
+      !userMenu.contains(event.target) &&
+      profileToggle &&
+      !profileToggle.contains(event.target)
+    ) {
+      closeMenu();
+    }
+  });
+
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
+      closeMenu();
       await signOut(auth);
       showToast("Logged out");
       window.location.href = "index.html";
@@ -69,13 +117,39 @@ function initAuthUI() {
       el.style.display = user ? "none" : "";
     });
 
-    const chip = document.getElementById("user-chip");
-    if (chip && user) {
-      chip.textContent = user.displayName || user.email;
+    if (profileToggle) {
+      profileToggle.style.display = user ? "" : "none";
+      if (!user) closeMenu();
     }
 
-    // Let page-specific scripts react (e.g. shop.js loads the cart badge,
-    // cart.html/wishlist.html/orders.html redirect guests to login).
+    const userNameEl = document.getElementById("menu-user-name");
+    const userEmailEl = document.getElementById("menu-user-email");
+    const authMethodEl = document.getElementById("menu-auth-method");
+    const passwordRow = document.querySelector(".password-row");
+
+    if (user) {
+      const displayName = user.displayName || user.email?.split("@")[0] || "Member";
+      const email = user.email || "Unknown";
+      const providerId = user.providerData?.[0]?.providerId || "password";
+      const methodLabel =
+        providerId === "password"
+          ? "Email"
+          : providerId === "google.com"
+          ? "Google"
+          : providerId;
+
+      if (userNameEl) userNameEl.textContent = displayName;
+      if (userEmailEl) userEmailEl.textContent = email;
+      if (authMethodEl) authMethodEl.textContent = methodLabel;
+      if (passwordRow)
+        passwordRow.style.display = providerId === "password" ? "flex" : "none";
+    } else {
+      if (userNameEl) userNameEl.textContent = "";
+      if (userEmailEl) userEmailEl.textContent = "";
+      if (authMethodEl) authMethodEl.textContent = "";
+      if (passwordRow) passwordRow.style.display = "none";
+    }
+
     document.dispatchEvent(
       new CustomEvent("ut-auth-ready", { detail: { user } })
     );
